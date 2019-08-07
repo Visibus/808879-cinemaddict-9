@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Виталий Жарков](https://up.htmlacademy.ru/ecmascript/9/user/808879).
-* Наставник: `Неизвестно`.
+* Наставник: [Олег Зубов] (https://htmlacademy.ru/profile/id42701).
 
 ---
 
