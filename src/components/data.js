@@ -1,4 +1,4 @@
-import {getRandNumber, getRandElementFromArr, getRandSeveralElementsFromArr} from "./utils";
+import {getRandNumber, getRandElementFromArr, getRandSeveralElementsFromArr, getRandBoolean} from "./utils";
 
 const AMOUNT_FILMS = 20;
 const MAX_COMMENTS_COUNT = 5;
@@ -44,6 +44,9 @@ const getFilmCard = () => ({
   poster: getRandElementFromArr(postersMoc),
   description: getDescription(descriptionMoc),
   commentsAmount: `${getRandNumber(500)}`,
+  watchlist: getRandBoolean(),
+  watched: getRandBoolean(),
+  favorite: getRandBoolean(),
   details: {
     age: `${getRandNumber(MAX_AGE)}+`,
     director: getRandElementFromArr(namesMoc),
@@ -68,4 +71,4 @@ const filmComments = () => Array.from({length: getRandNumber(MAX_COMMENTS_COUNT)
 
 const getFilmsAmount = () => filmsAmount;
 
-export {getFilmCard, filmCards, getFilmsAmount, filmComments};
+export {filmCards, getFilmsAmount, filmComments};
