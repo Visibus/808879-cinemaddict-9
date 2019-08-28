@@ -1,4 +1,34 @@
-export const createPopupTemplate = ({details, titles, rating, duration, genres}, comments) => `<section class="film-details">
+import {createElement} from './utils';
+
+export class Popup {
+  constructor({titles, rating, duration, poster, genres, details: {age, director, writers, actors, releaseDate, countries, description}}, comments) {
+    this._element = null;
+    this._titles = titles;
+    this._rating = rating;
+    this._duration = duration;
+    this._poster = poster;
+    this._genres = genres;
+    this._details = {
+      _age: age,
+      _director: director,
+      _writers: writers,
+      _actors: actors,
+      _releaseDate: releaseDate,
+      _countries: countries,
+      _description: description
+    };
+    this._comments = comments;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  getTemplate() {
+    return `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
   <div class="form-details__top-container">
     <div class="film-details__close">
@@ -8,51 +38,51 @@ export const createPopupTemplate = ({details, titles, rating, duration, genres},
       <div class="film-details__poster">
         <img class="film-details__poster-img" src="./images/posters/the-great-flamarion.jpg" alt="">
 
-        <p class="film-details__age">${details.age}</p>
+        <p class="film-details__age">${this._details._age}</p>
       </div>
 
       <div class="film-details__info">
         <div class="film-details__info-head">
           <div class="film-details__title-wrap">
-            <h3 class="film-details__title">${titles}</h3>
-            <p class="film-details__title-original">Original: ${titles}</p>
+            <h3 class="film-details__title">${this._titles}</h3>
+            <p class="film-details__title-original">Original: ${this._titles}</p>
           </div>
 
           <div class="film-details__rating">
-            <p class="film-details__total-rating">${rating}</p>
+            <p class="film-details__total-rating">${this._rating}</p>
           </div>
         </div>
 
         <table class="film-details__table">
           <tr class="film-details__row">
             <td class="film-details__term">Director</td>
-            <td class="film-details__cell">${details.director}</td>
+            <td class="film-details__cell">${this._details._director}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Writers</td>
-            <td class="film-details__cell">${details.writers.join(`, `)}</td>
+            <td class="film-details__cell">${this._details._writers.join(`, `)}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Actors</td>
-            <td class="film-details__cell">${details.actors.join(`, `)}</td>
+            <td class="film-details__cell">${this._details._actors.join(`, `)}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Release Date</td>
-            <td class="film-details__cell">${details.releaseDate}</td>
+            <td class="film-details__cell">${this._details._releaseDate}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${duration}</td>
+            <td class="film-details__cell">${this._duration}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
-            <td class="film-details__cell">${details.countries}</td>
+            <td class="film-details__cell">${this._details._countries}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Genres</td>
             <td class="film-details__cell">
               <span class="film-details__genre">
-                ${genres
+                ${this._genres
                 .map((genre) => `<span class="film-details__genre">${genre}</span>`)
                 .join(``)}</span>
             </td>
@@ -60,7 +90,7 @@ export const createPopupTemplate = ({details, titles, rating, duration, genres},
         </table>
 
         <p class="film-details__film-description">
-          ${details.description}
+          ${this._details._description}
         </p>
       </div>
     </div>
@@ -79,9 +109,9 @@ export const createPopupTemplate = ({details, titles, rating, duration, genres},
 
   <div class="form-details__bottom-container">
     <section class="film-details__comments-wrap">
-      <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+      <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._comments.length}</span></h3>
       <ul class="film-details__comments-list">
-      ${comments
+      ${this._comments
         .map(({emoji, text, author, date}) =>
           `
       <li class="film-details__comment">
@@ -130,5 +160,11 @@ export const createPopupTemplate = ({details, titles, rating, duration, genres},
 </section>
 </div>
 </form>
-</section>
-`;
+</section>`.trim();
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+}
