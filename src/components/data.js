@@ -1,6 +1,6 @@
 import {getRandNumber, getRandElementFromArr, getRandSeveralElementsFromArr, getRandBoolean} from "./utils";
 
-const AMOUNT_FILMS = 20;
+const AMOUNT_FILMS = 10;
 const MAX_COMMENTS_COUNT = 5;
 const MAX_ACTORS_COUNT = 3;
 const MAX_AGE = 21;

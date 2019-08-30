@@ -6,7 +6,7 @@ import {createShowMoreTemplate} from './components/show-more.js';
 import {Popup} from './components/popup.js';
 import {filmCards, getFilmsAmount, filmComments} from './components/data';
 import {render, Position, unrender, getRandNumber} from "./components/utils";
-
+import {NoFilms} from './components/no-films';
 
 const COUNT_CARDS = {
   filmsList: 5,
@@ -27,6 +27,13 @@ const renderFilm = (container, card, comments) => {
   const filmCard = new Card(card);
   const filmDetails = new Popup(card, comments);
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      unrender(filmDetails.getElement());
+      filmDetails.removeElement();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
   const renderFilmDetails = () => {
     render(mainElement, filmDetails.getElement(), Position.BEFOREEND);
     filmCard.removeElement();
@@ -34,20 +41,43 @@ const renderFilm = (container, card, comments) => {
 
   filmCard.getElement()
     .querySelector(`.film-card__poster`)
-    .addEventListener(`click`, renderFilmDetails);
+    .addEventListener(`click`, () => {
+      renderFilmDetails();
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
 
   filmCard.getElement()
     .querySelector(`.film-card__title`)
-    .addEventListener(`click`, renderFilmDetails);
+    .addEventListener(`click`, () => {
+      renderFilmDetails();
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
 
   filmCard.getElement()
     .querySelector(`.film-card__comments`)
-    .addEventListener(`click`, renderFilmDetails);
+    .addEventListener(`click`, () => {
+      renderFilmDetails();
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
 
   filmDetails.getElement()
     .querySelector(`.film-details__close-btn`)
-    .addEventListener(`click`, () => {
+    .addEventListener(`click`, (evt) => {
+      evt.preventDefault();
       unrender(filmDetails.getElement());
+      filmDetails.removeElement();
+    });
+
+  filmDetails.getElement()
+    .querySelector(`.film-details__comment-input`)
+    .addEventListener(`focus`, () => {
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    });
+
+  filmDetails.getElement()
+    .querySelector(`.film-details__comment-input`)
+    .addEventListener(`blur`, () => {
+      document.addEventListener(`keydown`, onEscKeyDown);
     });
 
   render(container, filmCard.getElement(), Position.BEFOREEND);
@@ -77,7 +107,6 @@ extraFilmsListElements.forEach((films) => {
 });
 
 statisticsElement.textContent = `${getFilmsAmount()} movies inside`;
-// render(document.body, createPopupTemplate(getFilmCard(), filmComments()));
 
 const loadButtonShowMoreElement = document.querySelector(`.films-list__show-more`);
 
@@ -95,3 +124,10 @@ loadButtonShowMoreElement.addEventListener(`click`, () => {
     filmsListElement.removeChild(loadButtonShowMoreElement);
   }
 });
+
+if (filmsListContainerElement.childElementCount === 0) {
+  Array.from(mainElement.children).forEach((it) => {
+    unrender(it);
+  });
+  render(mainElement, new NoFilms().getElement(), Position.AFTERBEGIN);
+}
