@@ -1,7 +1,8 @@
-import {createElement} from './utils';
+import {AbstractComponent} from './abstract-component';
 
-export class Card {
+export class Card extends AbstractComponent {
   constructor({titles, poster, description, rating, year, duration, genres, commentsAmount, watchlist, watched, favorite}) {
+    super();
     this._titles = titles;
     this._poster = poster;
     this._description = description;
@@ -13,16 +14,8 @@ export class Card {
     this._watchlist = watchlist;
     this._watched = watched;
     this._favorite = favorite;
-    this._element = null;
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
   getTemplate() {
     return `
   <article class="film-card">
@@ -44,10 +37,4 @@ export class Card {
   </article>`.trim();
   }
 
-  removeElement() {
-    if (!this._element) {
-      this._element = null;
-    }
-    return this._element;
-  }
 }

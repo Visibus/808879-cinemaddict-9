@@ -29,7 +29,7 @@ export const removeElement = (element) => {
   element.remove();
 };
 
-export const render = (container, element, place) => {
+export const render = (container, element, place = Position.BEFOREEND) => {
   switch (place) {
     case Position.AFTERBEGIN:
       container.prepend(element);
