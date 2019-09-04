@@ -13,7 +13,7 @@ render(headerElement, new Search().getElement());
 render(headerElement, new Profile(getRandNumber(getFilmsAmount())).getElement());
 render(mainElement, new Menu(getFilmsAmount()).getElement());
 
-const pageController = new PageController(mainElement, filmCards, filmComments());
+const pageController = new PageController(mainElement, filmCards(), filmComments());
 pageController.init();
 
 statisticsElement.textContent = `${getFilmsAmount()} movies inside`;
