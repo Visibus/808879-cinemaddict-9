@@ -4,7 +4,7 @@ const AMOUNT_FILMS = 10;
 const MAX_COMMENTS_COUNT = 5;
 const MAX_ACTORS_COUNT = 3;
 const MAX_AGE = 21;
-const MAX_RATING = 10;
+const MAX_RATING = 9;
 const MIN_YEAR = 1919;
 const RANGE_YEARS = 100;
 

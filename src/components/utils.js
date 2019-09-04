@@ -1,3 +1,9 @@
+export const COUNT_CARDS = {
+  filmsList: 5,
+  filmsTopRated: 2,
+  filmsMostCommented: 2,
+};
+
 export const getRandNumber = (number) => {
   return Math.floor(Math.random() * number);
 };
