@@ -1,13 +1,16 @@
 import {createElement} from './utils';
 
 export class Popup {
-  constructor({titles, rating, duration, poster, genres, details: {age, director, writers, actors, releaseDate, countries, description}}, comments) {
+  constructor({titles, rating, duration, poster, genres, watchlist, watched, favorite, details: {age, director, writers, actors, releaseDate, countries, description}, comments}) {
     this._element = null;
     this._titles = titles;
     this._rating = rating;
     this._duration = duration;
     this._poster = poster;
     this._genres = genres;
+    this._watchlist = watchlist;
+    this._watched = watched;
+    this._favorite = favorite;
     this._details = {
       _age: age,
       _director: director,
@@ -36,7 +39,7 @@ export class Popup {
     </div>
     <div class="film-details__info-wrap">
       <div class="film-details__poster">
-        <img class="film-details__poster-img" src="./images/posters/the-great-flamarion.jpg" alt="">
+        <img class="film-details__poster-img" src="${this._poster}" alt="">
 
         <p class="film-details__age">${this._details._age}</p>
       </div>
@@ -96,13 +99,13 @@ export class Popup {
     </div>
 
     <section class="film-details__controls">
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${this._watchlist ? `checked` : ``}>
       <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${this._watched ? `checked` : ``}>
       <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-      <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+      <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${this._favorite ? `checked` : ``}>
       <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
     </section>
   </div>
@@ -111,26 +114,19 @@ export class Popup {
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._comments.length}</span></h3>
       <ul class="film-details__comments-list">
-      ${this._comments
-        .map(({emoji, text, author, date}) =>
-          `
-      <li class="film-details__comment">
+      ${this._comments.map((it) => `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
-          <img src="${emoji}" width="55" height="55" alt="emoji">
+          <img src="${it.emoji}" width="55" height="55" alt="emoji">
         </span>
         <div>
-          <p class="film-details__comment-text">${text}</p>
+          <p class="film-details__comment-text">${it.text}</p>
           <p class="film-details__comment-info">
-            <span class="film-details__comment-author">${author}</span>
-            <span class="film-details__comment-day">${date}</span>
+            <span class="film-details__comment-author">${it.author}</span>
+            <span class="film-details__comment-day">${new Date(it.date).toDateString()}</span>
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>
-      </li>
-
-      `.trim()
-        )
-        .join(``)}
+      </li>`)}
     </ul>
 
     <div class="film-details__new-comment">
