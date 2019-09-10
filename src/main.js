@@ -1,7 +1,7 @@
 import {Search} from './components/search.js';
 import {Profile} from './components/profile.js';
 import {Menu} from './components/menu.js';
-import {filmCards, getFilmsAmount, filmComments} from './components/data';
+import {filmCards, getFilmsAmount} from './components/data';
 import {render, getRandNumber} from "./components/utils";
 import {PageController} from './components/page-controller';
 
@@ -13,7 +13,7 @@ render(headerElement, new Search().getElement());
 render(headerElement, new Profile(getRandNumber(getFilmsAmount())).getElement());
 render(mainElement, new Menu(getFilmsAmount()).getElement());
 
-const pageController = new PageController(mainElement, filmCards(), filmComments());
+const pageController = new PageController(mainElement, filmCards);
 pageController.init();
 
 statisticsElement.textContent = `${getFilmsAmount()} movies inside`;

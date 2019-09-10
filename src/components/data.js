@@ -35,6 +35,15 @@ const getRating = () => {
 };
 const getDuration = () => `${getRandNumber(2)}h ${getRandNumber(59, 1)}m`;
 
+const getFilmComment = () => ({
+  emoji: getRandElementFromArr(emojiNoc),
+  text: getRandElementFromArr(commentMoc),
+  date: `${getRandNumber(10, 2)} days ago`,
+  author: getRandElementFromArr(namesMoc)
+});
+
+const filmComments = Array.from({length: getRandNumber(MAX_COMMENTS_COUNT)}, getFilmComment);
+
 const getFilmCard = () => ({
   titles: getRandElementFromArr(titlesMoc),
   rating: getRating(),
@@ -56,19 +65,12 @@ const getFilmCard = () => ({
     countries: getRandElementFromArr(countriesMoc),
     description: getDescription(descriptionMoc)
   },
+  ratingViewer: getRandNumber(MAX_RATING - 1) + 1,
+  comments: filmComments
 });
 
-const getFilmComment = () => ({
-  emoji: getRandElementFromArr(emojiNoc),
-  text: getRandElementFromArr(commentMoc),
-  date: `${getRandNumber(10, 2)} days ago`,
-  author: getRandElementFromArr(namesMoc)
-});
-
-const filmCards = () => Array.from({length: filmsAmount}, getFilmCard);
-
-const filmComments = () => Array.from({length: getRandNumber(MAX_COMMENTS_COUNT)}, getFilmComment);
+const filmCards = Array.from({length: filmsAmount}, getFilmCard);
 
 const getFilmsAmount = () => filmsAmount;
 
-export {filmCards, getFilmsAmount, filmComments};
+export {filmCards, getFilmsAmount};

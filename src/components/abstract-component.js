@@ -14,7 +14,7 @@ export class AbstractComponent {
   }
 
   removeElement() {
-    if (!this._element) {
+    if (this._element) {
       this._element = null;
     }
     return this._element;
