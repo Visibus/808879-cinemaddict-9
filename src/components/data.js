@@ -65,7 +65,7 @@ const getFilmCard = () => ({
     countries: getRandElementFromArr(countriesMoc),
     description: getDescription(descriptionMoc)
   },
-  ratingViewer: getRandNumber(MAX_RATING),
+  ratingViewer: getRandNumber(MAX_RATING - 1) + 1,
   comments: filmComments
 });
 

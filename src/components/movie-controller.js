@@ -144,7 +144,7 @@ export class MovieController {
         entry.watched = this._card.watched ? false : true;
         if (document.querySelector(`.film-details__user-rating-wrap`)) {
           unrender(containerRating);
-          entry._ratingViewer = null;
+          entry.ratingViewer = null;
         } else {
           render(getContainer(), this._rating.getElement());
         }
@@ -170,6 +170,13 @@ export class MovieController {
         container.append(image);
       };
       addEmoji(emoji);
+    });
+
+    this._rating.getElement()
+    .querySelector(`.film-details__user-rating-score`)
+    .addEventListener(`change`, () => {
+      const radio = Array.from(this._rating.getElement().querySelectorAll(`.film-details__user-rating-input`));
+      entry.ratingViewer = Number(radio.length && radio.find((r) => r.checked).value);
     });
 
     render(this._container, this._filmCard.getElement());
