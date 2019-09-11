@@ -1,4 +1,5 @@
-import {getRandNumber, getRandElementFromArr, getRandSeveralElementsFromArr, getRandBoolean} from "./utils";
+import {getRandNumber, getRandElementFromArr, getRandSeveralElementsFromArr, getRandBoolean, getRandDate} from "./utils";
+import moment from 'moment';
 
 const AMOUNT_FILMS = 10;
 const MAX_COMMENTS_COUNT = 5;
@@ -9,7 +10,6 @@ const MIN_YEAR = 1919;
 const RANGE_YEARS = 100;
 
 
-const monthsMoc = [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`];
 const filmsAmount = getRandNumber(AMOUNT_FILMS);
 const titlesMoc = [`The Shawshank Redemption`, `The Green Mile`, `Pulp Fiction`, `Snatch`, `Lock, Stock and Two Smoking Barrels`, `Interstellar`, `Catch Me If You Can`, `The Lord of the Rings: The Return of the King`, `Forrest Gump`, `Fight Club`, `A Beautiful Mind`, `Back to the Future`, `The Silence of the Lambs`, `Groundhog Day`, `Ghost`];
 const descriptionMoc = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus`;
@@ -38,7 +38,7 @@ const getDuration = () => `${getRandNumber(2)}h ${getRandNumber(59, 1)}m`;
 const getFilmComment = () => ({
   emoji: getRandElementFromArr(emojiNoc),
   text: getRandElementFromArr(commentMoc),
-  date: `${getRandNumber(10, 2)} days ago`,
+  date: getRandDate(),
   author: getRandElementFromArr(namesMoc)
 });
 
@@ -61,7 +61,7 @@ const getFilmCard = () => ({
     director: getRandElementFromArr(namesMoc),
     writers: new Array(MAX_ACTORS_COUNT).fill(``).map(() => getRandElementFromArr(namesMoc)),
     actors: new Array(MAX_ACTORS_COUNT).fill(``).map(() => getRandElementFromArr(namesMoc)),
-    releaseDate: `${getRandNumber(31)} ${getRandElementFromArr(monthsMoc)} ${getRandNumber(RANGE_YEARS) + MIN_YEAR}`,
+    releaseDate: moment([getRandNumber(RANGE_YEARS) + MIN_YEAR, getRandNumber(11) + 1, getRandNumber(31)]),
     countries: getRandElementFromArr(countriesMoc),
     description: getDescription(descriptionMoc)
   },
