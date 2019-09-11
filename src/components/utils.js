@@ -1,3 +1,5 @@
+const MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
+
 export const COUNT_CARDS = {
   filmsList: 5,
   filmsTopRated: 2,
@@ -18,6 +20,10 @@ export const getRandSeveralElementsFromArr = (array, countElements) => {
 
 export const getRandBoolean = () => {
   return Boolean(Math.round(Math.random()));
+};
+
+export const getRandDate = () => {
+  return Date.now() - Math.floor(Math.random() * 7) * MILLISECONDS_IN_DAY;
 };
 
 export const Position = {

@@ -1,4 +1,6 @@
 import {createElement} from './utils';
+import moment from 'moment';
+
 
 export class Popup {
   constructor({titles, rating, duration, poster, genres, watchlist, watched, favorite, details: {age, director, writers, actors, releaseDate, countries, description}, comments}) {
@@ -71,7 +73,7 @@ export class Popup {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Release Date</td>
-            <td class="film-details__cell">${this._details._releaseDate}</td>
+            <td class="film-details__cell">${moment(this._details._releaseDate).format(`D MMM YYYY`)}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
@@ -122,7 +124,7 @@ export class Popup {
           <p class="film-details__comment-text">${it.text}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${it.author}</span>
-            <span class="film-details__comment-day">${new Date(it.date).toDateString()}</span>
+            <span class="film-details__comment-day">${moment(it.date).startOf(`day`).fromNow()}</span>
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>
