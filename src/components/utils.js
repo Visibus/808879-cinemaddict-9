@@ -6,6 +6,8 @@ export const COUNT_CARDS = {
   filmsMostCommented: 2,
 };
 
+export const MIN_LENGTH_SEARCH_STRING = 3;
+
 export const getRandNumber = (number) => {
   return Math.floor(Math.random() * number);
 };
