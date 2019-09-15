@@ -1,14 +1,16 @@
-import {Films} from "./films";
-import {FilmsList} from "./films-list";
-import {FilmsListContainer} from "./films-list-container";
-import {FilmsListTopRated} from "./films-list-top-rated";
-import {FilmsListMostCommented} from "./films-list-most-commented";
-import {ShowMore} from './show-more.js';
-import {COUNT_CARDS, render, unrender, Position, removeElement} from './utils';
-import {getFilmsAmount} from './data';
-import {NoFilms} from './no-films';
-import {Sort} from './sort';
+import {Films} from "../components/films";
+import {FilmsList} from "../components/films-list";
+// import {FilmsListContainer} from "../components/films-list-container";
+import {FilmsListTopRated} from "../components/films-list-top-rated";
+import {FilmsListMostCommented} from "../components/films-list-most-commented";
+import {ShowMore} from '../components/show-more.js';
+import {COUNT_CARDS, render, unrender, Position, removeElement} from '../components/utils';
+import {getFilmsAmount} from '../components/data';
+import {NoFilms} from '../components/no-films';
+import {Sort} from '../components/sort';
 import {MovieController} from './movie-controller';
+import {Statistics} from '../components/statistics';
+
 
 export class PageController {
   constructor(container, cards) {
@@ -17,7 +19,6 @@ export class PageController {
     this._arraySort = this._cards;
     this._films = new Films();
     this._filmsList = new FilmsList();
-    this._filmsListContainer = new FilmsListContainer();
     this._filmsListTopRated = new FilmsListTopRated();
     this._filmsListMostCommented = new FilmsListMostCommented();
     this._noFilms = new NoFilms();
@@ -27,6 +28,7 @@ export class PageController {
     this._subscriptions = [];
     this._onDataChange = this._onDataChange.bind(this);
     this._onChangeView = this._onChangeView.bind(this);
+    this._statistic = new Statistics();
   }
   init() {
 
@@ -35,9 +37,22 @@ export class PageController {
 
     render(this._container, this._films.getElement());
     render(this._films.getElement(), this._filmsList.getElement());
-    render(this._filmsList.getElement(), this._filmsListContainer.getElement());
 
     this._renderFilmList(this._cards);
+  }
+
+  show(cards) {
+    if (cards !== this._cards) {
+      this._setFilmCards(cards);
+    }
+
+    this._sort.getElement().classList.remove(`visually-hidden`);
+    this._films.getElement().classList.remove(`visually-hidden`);
+  }
+
+  hide() {
+    this._sort.getElement().classList.add(`visually-hidden`);
+    this._films.getElement().classList.add(`visually-hidden`);
   }
 
   _loadExtraFilms() {
@@ -95,12 +110,9 @@ export class PageController {
     this._films.removeElement();
     removeElement(this._filmsList.getElement());
     this._filmsList.removeElement();
-    removeElement(this._filmsListContainer.getElement());
-    this._filmsListContainer.removeElement();
 
     render(this._container, this._films.getElement());
     render(this._films.getElement(), this._filmsList.getElement());
-    render(this._filmsList.getElement(), this._filmsListContainer.getElement());
 
     const filmsListElement = this._container.querySelector(`.films-list`);
     const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
@@ -141,9 +153,9 @@ export class PageController {
       return;
     }
 
-    this._filmsListContainer.getElement().innerHTML = ``;
     const filmsListElement = this._container.querySelector(`.films-list`);
     const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
+    filmsListContainerElement.innerHTML = ``;
     const buttonSortClass = `sort__button--active`;
     const buttonSortElement = this._sort.getElement().querySelector(`.${buttonSortClass}`);
 
@@ -151,7 +163,7 @@ export class PageController {
       case `date`:
         buttonSortElement.classList.remove(buttonSortClass);
         evt.target.classList.add(buttonSortClass);
-        this._arraySort = this._cards.sort((a, b) => a.year - b.year);
+        this._arraySort = this._cards.sort((a, b) => b.year - a.year);
         this._arraySort.slice(0, COUNT_CARDS.filmsList).forEach((filmMock) => this._renderFilm(filmsListContainerElement, filmMock));
         break;
       case `rating`:
