@@ -2,6 +2,8 @@ import {findCounts, removeElement, render} from "../components/utils";
 import {Statistics} from "../components/statistics";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import moment from 'moment';
+import {StatisticsFilters} from "../components/statistics-filters";
 
 export class StatisticsController {
   constructor(container, cards) {
@@ -10,11 +12,13 @@ export class StatisticsController {
     this._chart = null;
 
     this._statistics = new Statistics(this._cards);
+    this._statisticsFilters = new StatisticsFilters(this._cards);
   }
 
   show(cards) {
     this._statistics.getElement().classList.remove(`visually-hidden`);
     if (cards !== this._cards) {
+      this._renderFilters(cards);
       this._renderStatistics(cards);
       this._renderCharts(cards);
     }
@@ -22,9 +26,11 @@ export class StatisticsController {
 
   hide() {
     this._statistics.getElement().classList.add(`visually-hidden`);
+    this._statisticsFilters.getElement().classList.add(`visually-hidden`);
   }
 
   init() {
+    this._renderFilters(this._cards);
     this._renderStatistics(this._cards);
     this._renderCharts(this._cards);
     this.hide();
@@ -34,7 +40,48 @@ export class StatisticsController {
     removeElement(this._statistics.getElement());
     this._statistics.removeElement();
     this._statistics = new Statistics(cards);
-    render(this._container, this._statistics.getElement());
+    render(this._statisticsFilters.getElement(), this._statistics.getElement());
+  }
+
+  _renderFilters(cards) {
+    removeElement(this._statisticsFilters.getElement());
+    this._statisticsFilters.removeElement();
+    this._statisticsFilters = new StatisticsFilters(cards);
+    render(this._container, this._statisticsFilters.getElement());
+    const filterInputs = this._statisticsFilters.getElement().querySelectorAll(`.statistic__filters-input`);
+    filterInputs.forEach((input) => input.addEventListener(`click`, (evt) => this._onFilterClick(evt, cards)));
+  }
+
+  _onFilterClick(evt, cards) {
+    // const activeClass = `statistic__filters-input--active`;
+    // const activeLinkElement = this._statistics.getElement().querySelector(`.${activeClass}`);
+    // if (activeLinkElement) {
+    //   activeLinkElement.classList.remove(activeClass);
+    // }
+    // evt.target.classList.add(activeClass);
+    const aa = evt.target.value;
+    switch (aa) {
+      case `all-time`:
+        this._renderStatistics(cards);
+        this._renderCharts(cards);
+        break;
+      case `today`:
+        this._renderStatistics(cards.slice().filter((n) => moment(n.watchingDate).isoWeekday() === moment().isoWeekday()));
+        this._renderCharts(cards.slice().filter((n) => moment(n.watchingDate).isoWeekday() === moment().isoWeekday()));
+        break;
+      case `week`:
+        this._renderStatistics(cards.slice().filter((n) => moment(n.watchingDate).isoWeek() === moment().isoWeek()));
+        this._renderCharts(cards.slice().filter((n) => moment(n.watchingDate).isoWeek() === moment().isoWeek()));
+        break;
+      case `month`:
+        this._renderStatistics(cards.slice().filter((n) => moment(n.watchingDate).month() === moment().month()));
+        this._renderCharts(cards.slice().filter((n) => moment(n.watchingDate).month() === moment().month()));
+        break;
+      case `year`:
+        this._renderStatistics(cards.slice().filter((n) => moment(n.watchingDate).year() === moment().year()));
+        this._renderCharts(cards.slice().filter((n) => moment(n.watchingDate).year() === moment().year()));
+        break;
+    }
   }
 
   _renderCharts(cards) {

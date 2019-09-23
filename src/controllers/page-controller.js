@@ -56,6 +56,7 @@ export class PageController {
   show() {
     this._sort.getElement().classList.remove(`visually-hidden`);
     this._films.getElement().classList.remove(`visually-hidden`);
+    this._renderFilmList(this._cards);
   }
 
   _loadExtraFilms() {

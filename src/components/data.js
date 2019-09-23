@@ -63,6 +63,7 @@ const getFilmCard = () => ({
     description: getDescription(descriptionMoc)
   },
   ratingViewer: getRandNumber(MAX_RATING - 1) + 1,
+  watchingDate: getRandDate(),
   comments: Array.from({length: getRandNumber(MAX_COMMENTS_COUNT)}, getFilmComment)
 });
 

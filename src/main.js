@@ -29,13 +29,17 @@ searchController.init();
 pageController.init();
 statisticsController.init();
 
+let querySearch = ``;
 search.getElement().querySelector(`input`).addEventListener(`keyup`, (evt) => {
-  if (evt.target.value.length >= MIN_LENGTH_SEARCH_STRING) {
-    searchController.show();
-    pageController.hide();
-  } else {
-    searchController.hide();
-    pageController.show();
+  if (querySearch !== evt.target.value) {
+    if (evt.target.value.length >= MIN_LENGTH_SEARCH_STRING) {
+      searchController.show();
+      pageController.hide();
+    } else {
+      searchController.hide();
+      pageController.show();
+    }
+    querySearch = evt.target.value;
   }
 });
 
