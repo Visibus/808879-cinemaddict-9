@@ -1,7 +1,7 @@
 import {getRandNumber, getRandElementFromArr, getRandSeveralElementsFromArr, getRandBoolean, getRandDate} from "./utils";
 import moment from 'moment';
 
-const AMOUNT_FILMS = 10;
+const AMOUNT_FILMS = 14;
 const MAX_COMMENTS_COUNT = 5;
 const MAX_ACTORS_COUNT = 3;
 const MAX_AGE = 21;
@@ -10,7 +10,7 @@ const MIN_YEAR = 1919;
 const RANGE_YEARS = 100;
 
 
-const filmsAmount = getRandNumber(AMOUNT_FILMS);
+const filmsAmount = AMOUNT_FILMS; // getRandNumber(AMOUNT_FILMS);
 const titlesMoc = [`The Shawshank Redemption`, `The Green Mile`, `Pulp Fiction`, `Snatch`, `Lock, Stock and Two Smoking Barrels`, `Interstellar`, `Catch Me If You Can`, `The Lord of the Rings: The Return of the King`, `Forrest Gump`, `Fight Club`, `A Beautiful Mind`, `Back to the Future`, `The Silence of the Lambs`, `Groundhog Day`, `Ghost`];
 const descriptionMoc = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus`;
 const namesMoc = [`Anthony Mann`, `Anne Wigton`, `Heinz Herald`, `Richard Weil`, `Erich von Stroheim`, `Mary Beth Hughes`, `Dan Duryea`];
@@ -33,7 +33,6 @@ const getRating = () => {
   const firstDigit = getRandNumber(10);
   return firstDigit < MAX_RATING ? `${firstDigit}.${getRandNumber(MAX_RATING - 1)}` : `${firstDigit}.0`;
 };
-const getDuration = () => `${getRandNumber(2)}h ${getRandNumber(59, 1)}m`;
 
 const getFilmComment = () => ({
   emoji: getRandElementFromArr(emojiNoc),
@@ -42,13 +41,11 @@ const getFilmComment = () => ({
   author: getRandElementFromArr(namesMoc)
 });
 
-const filmComments = Array.from({length: getRandNumber(MAX_COMMENTS_COUNT)}, getFilmComment);
-
 const getFilmCard = () => ({
   titles: getRandElementFromArr(titlesMoc),
   rating: getRating(),
   year: `${getRandNumber(RANGE_YEARS) + MIN_YEAR}`,
-  duration: getDuration(),
+  duration: getRandNumber(200) * 60 * 1000,
   genres: getRandSeveralElementsFromArr(genresMoc, 3),
   poster: getRandElementFromArr(postersMoc),
   description: getDescription(descriptionMoc),
@@ -66,11 +63,11 @@ const getFilmCard = () => ({
     description: getDescription(descriptionMoc)
   },
   ratingViewer: getRandNumber(MAX_RATING - 1) + 1,
-  comments: filmComments
+  comments: Array.from({length: getRandNumber(MAX_COMMENTS_COUNT)}, getFilmComment)
 });
 
 const filmCards = Array.from({length: filmsAmount}, getFilmCard);
 
 const getFilmsAmount = () => filmsAmount;
 
-export {filmCards, getFilmsAmount};
+export {filmCards, getFilmsAmount, getFilmCard};

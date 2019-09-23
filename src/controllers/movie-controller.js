@@ -49,6 +49,7 @@ export class MovieController {
     let containerRating = null;
 
     const entry = this._entry();
+    // const entry = JSON.parse(JSON.stringify(this._card));
 
     const getContainer = () => {
       const formContainer = this._filmDetails.getElement().querySelector(`.film-details__inner`);
@@ -151,6 +152,7 @@ export class MovieController {
         evt.stopPropagation();
         entry.watchlist = this._card.watchlist ? false : true;
         this._onDataChange(entry, this._card);
+
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -161,6 +163,7 @@ export class MovieController {
         evt.stopPropagation();
         entry.watched = this._card.watched ? false : true;
         this._onDataChange(entry, this._card);
+
         document.removeEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -185,6 +188,7 @@ export class MovieController {
       .querySelector(`.film-details__control-label--watched`)
       .addEventListener(`click`, () => {
         entry.watched = this._card.watched ? false : true;
+
         if (document.querySelector(`.film-details__user-rating-wrap`)) {
           unrender(containerRating);
           entry.ratingViewer = null;
@@ -251,6 +255,7 @@ export class MovieController {
     .addEventListener(`change`, () => {
       const radio = Array.from(this._rating.getElement().querySelectorAll(`.film-details__user-rating-input`));
       entry.ratingViewer = Number(radio.length && radio.find((r) => r.checked).value);
+
     });
 
     render(this._container, this._filmCard.getElement());
@@ -262,5 +267,4 @@ export class MovieController {
       this._filmDetails.removeElement();
     }
   }
-
 }

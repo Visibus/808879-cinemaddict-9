@@ -14,7 +14,7 @@ export class SearchController {
     this._searchResult = new SearchResult();
     this._noResult = new SearchNoResult();
     this._filmsList = new FilmsList();
-    this._filmCardsController = new FilmCardsController(null, this._onDataChange.bind(this));
+    this._filmCardsController = new FilmCardsController(null, null, this._onDataChange.bind(this));
   }
 
   _onDataChange(cards) {
@@ -56,7 +56,7 @@ export class SearchController {
       this._searchResult = new SearchResult(cards.length);
       render(this._container, this._searchResult.getElement());
       render(this._container, this._filmsList.getElement());
-      this._filmCardsController = new FilmCardsController(this._filmsList.getElement().querySelector(`.films-list__container`), this._onDataChange.bind(this));
+      this._filmCardsController = new FilmCardsController(this._container, this._filmsList.getElement().querySelector(`.films-list__container`), this._onDataChange.bind(this));
       this._filmCardsController.setFilmCards(cards);
     } else {
       removeElement(this._filmsList.getElement());
