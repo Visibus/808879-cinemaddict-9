@@ -19,8 +19,6 @@ export class FilmCardsController {
     this._showMore = new ShowMore();
     this._films = new Films();
     this._filmsList = new FilmsList();
-
-
   }
 
   setFilmCards(cards) {

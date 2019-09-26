@@ -35,8 +35,8 @@ export class Statistics extends AbstractComponent {
       </li>
       <li class="statistic__text-item">
         <h4 class="statistic__item-title">Total duration</h4>
-        <p class="statistic__item-text">${moment.utc(moment.duration(sumDuration(this._cards), `milliseconds`).asMilliseconds()).format(`H`)}
-        <span class="statistic__item-description">h</span> ${moment.utc(moment.duration(sumDuration(this._cards), `milliseconds`).asMilliseconds()).format(`mm`)}
+        <p class="statistic__item-text">${moment.utc(moment.duration(sumDuration(this._cards), `minutes`).asMilliseconds()).format(`H`)}
+        <span class="statistic__item-description">h</span> ${moment.utc(moment.duration(sumDuration(this._cards), `minutes`).asMilliseconds()).format(`mm`)}
         <span class="statistic__item-description">m</span></p>
       </li>
       <li class="statistic__text-item">

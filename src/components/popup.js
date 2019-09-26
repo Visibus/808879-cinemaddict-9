@@ -3,7 +3,7 @@ import moment from 'moment';
 
 
 export class Popup {
-  constructor({titles, rating, duration, poster, genres, watchlist, watched, favorite, details: {age, director, writers, actors, releaseDate, countries, description}, comments}) {
+  constructor({titles, rating, duration, poster, genres, watchlist, watched, favorite, details: {originalTitle, age, director, writers, actors, releaseDate, countries, description}, comments}) {
     this._element = null;
     this._titles = titles;
     this._rating = rating;
@@ -14,6 +14,7 @@ export class Popup {
     this._watched = watched;
     this._favorite = favorite;
     this._details = {
+      _originalTitle: originalTitle,
       _age: age,
       _director: director,
       _writers: writers,
@@ -50,7 +51,7 @@ export class Popup {
         <div class="film-details__info-head">
           <div class="film-details__title-wrap">
             <h3 class="film-details__title">${this._titles}</h3>
-            <p class="film-details__title-original">Original: ${this._titles}</p>
+            <p class="film-details__title-original">Original: ${this._details._originalTitle}</p>
           </div>
 
           <div class="film-details__rating">
@@ -77,8 +78,8 @@ export class Popup {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${moment.utc(moment.duration(this._duration, `milliseconds`).asMilliseconds()).format(`H`) + ` h ` +
-            moment.utc(moment.duration(this._duration, `milliseconds`).asMilliseconds()).format(`m`) + ` m`}</td>
+            <td class="film-details__cell">${moment.utc(moment.duration(this._duration, `minutes`).asMilliseconds()).format(`H`) + ` h ` +
+            moment.utc(moment.duration(this._duration, `minutes`).asMilliseconds()).format(`m`) + ` m`}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
