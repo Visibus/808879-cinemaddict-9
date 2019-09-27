@@ -1,8 +1,11 @@
 import {Card} from '../components/card.js';
 import {Popup} from '../components/popup.js';
-import {render, unrender, removeElement, createElement} from '../components/utils';
+import {render, unrender, removeElement, createElement, END_POINT, AUTHORIZATION} from '../components/utils';
 import {Rating} from '../components/rating';
 import {Comments} from '../components/comments';
+import {API} from "../api/api";
+import {ModelComment} from "../api/model-comment";
+import moment from "moment";
 
 export class MovieController {
   constructor(container, card, onDataChange, onChangeView) {
@@ -13,43 +16,16 @@ export class MovieController {
     this._rating = new Rating(card);
     this._onDataChange = onDataChange;
     this._onChangeView = onChangeView;
+    this._api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
 
     this.init();
-  }
-
-  _entry() {
-    return {
-      titles: this._card.titles,
-      rating: this._card.rating,
-      year: this._card.year,
-      duration: this._card.duration,
-      genres: this._card.genres,
-      poster: this._card.poster,
-      description: this._card.description,
-      commentsAmount: this._card.commentsAmount,
-      watchlist: this._card.watchlist,
-      watched: this._card.watched,
-      favorite: this._card.favorite,
-      details: {
-        age: this._card.details.age,
-        director: this._card.details.director,
-        writers: this._card.details.writers,
-        actors: this._card.details.actors,
-        releaseDate: this._card.details.releaseDate,
-        countries: this._card.details.countries,
-        description: this._card.details.description
-      },
-      comments: this._card.comments,
-      ratingViewer: this._ratingViewer
-    };
   }
 
   init() {
     let commentsListElement = null;
     let containerRating = null;
 
-    const entry = this._entry();
-    // const entry = JSON.parse(JSON.stringify(this._card));
+    const entry = JSON.parse(JSON.stringify(this._card));
 
     const getContainer = () => {
       const formContainer = this._filmDetails.getElement().querySelector(`.film-details__inner`);
@@ -65,47 +41,62 @@ export class MovieController {
       this._filmCard.removeElement();
     };
 
-    const onCommentsChange = (newData, oldData) => {
-      const index = this._card.comments.findIndex((comments) => {
-        if (oldData !== null && comments.text === oldData._text && comments.emoji === oldData._emoji
-          && comments.author === oldData._author && comments.date === oldData._date) {
-          return true;
-        } else {
-          return false;
-        }
-      });
+    const onCommentsAdd = (evt, idFilm, newComm) => {
+      this._api.createComment({id: idFilm, data: ModelComment.toRAW(newComm)})
+        .then(() => {
+          evt.target.disabled = false;
+          evt.target.value = ``;
+          evt.target.blur();
+          this._onDataChange(entry, this._card);
+          renderCommentsAgain();
+        })
+        .catch(() => {
+          evt.target.disabled = false;
+        });
+    };
 
-      if (newData === null) {
-        this._card.comments = [...this._card.comments.slice(0, index), ...this._card.comments.slice(index + 1)];
-      } else {
-        this._card.comments.unshift(newData);
-      }
-      renderCommentsAgain();
+    const onCommentsDelete = (evt, index, comments) => {
+      evt.target.disabled = true;
+      evt.target.textContent = `Deleting…`;
+      this._api.deleteComment({id: comments[index].id})
+        .then(() => {
+          evt.target.disabled = false;
+          evt.target.textContent = `Delete`;
+          this._onDataChange(entry, this._card);
+          renderCommentsAgain();
+        })
+        .catch(() => {
+          evt.target.disabled = false;
+          evt.target.textContent = `Delete`;
+        });
+    };
+
+    const renderComment = () => {
+      this._api.getComments({id: this._card.id}).then((comments) => {
+        comments.forEach((commentCurr, index) => {
+          const comment = new Comments(commentCurr);
+          comment.getElement()
+          .querySelector(`.film-details__comment-delete`)
+          .addEventListener(`click`, (evt) => {
+            evt.preventDefault();
+            onCommentsDelete(evt, index, comments);
+
+            let quantityComments = this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML;
+            this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML = `${+quantityComments - 1}`;
+          });
+
+          commentsListElement = this._filmDetails.getElement().querySelector(`.film-details__comments-list`);
+          render(commentsListElement, comment.getElement());
+        });
+      });
     };
 
     const renderCommentsAgain = () => {
       commentsListElement = this._filmDetails.getElement().querySelector(`.film-details__comments-list`);
       commentsListElement.innerHTML = ``;
-      this._card.comments.forEach((commentMock) => renderComment(commentMock));
+      renderComment();
       entry.comments = this._card.comments;
     };
-
-    const renderComment = (comments) => {
-      const comment = new Comments(comments);
-
-      comment.getElement()
-        .querySelector(`.film-details__comment-delete`)
-        .addEventListener(`click`, (evt) => {
-          evt.preventDefault();
-          onCommentsChange(null, comment);
-          let quantityComments = this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML;
-          this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML = `${+quantityComments - 1}`;
-        });
-
-      commentsListElement = this._filmDetails.getElement().querySelector(`.film-details__comments-list`);
-      render(commentsListElement, comment.getElement());
-    };
-
 
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
@@ -122,7 +113,7 @@ export class MovieController {
       if (this._card.watched) {
         render(getContainer(), this._rating.getElement());
       }
-      this._card.comments.forEach((commentMock) => renderComment(commentMock));
+      renderComment();
       document.addEventListener(`keydown`, onEscKeyDown);
     };
 
@@ -229,16 +220,18 @@ export class MovieController {
         if (!commentFieldElement.value || !checkedInputElement) {
           return;
         }
-        const createComment = (image) => {
+        const createComment = (emoji) => {
           const textaria = this._filmDetails.getElement().querySelector(`.film-details__comment-input`);
           const newComment = {
             text: textaria.value,
             author: ``,
-            date: Date.now(),
-            emoji: image.src,
+            date: moment(),
+            emoji: {
+              id: emoji.src.slice(emoji.src.lastIndexOf(`/`) + 1, emoji.src.lastIndexOf(`.png`)),
+            }
           };
 
-          onCommentsChange(newComment, null);
+          onCommentsAdd(evt, this._card.id, newComment);
 
           this._filmDetails.getElement().querySelector(`.film-details__add-emoji-label`).innerHTML = ``;
           textaria.value = ``;

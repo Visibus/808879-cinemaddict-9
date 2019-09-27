@@ -1,53 +1,75 @@
 import {Search} from './components/search.js';
 import {Profile} from './components/profile.js';
-import {getFilmsAmount, getFilmCard} from './components/data';
-import {MIN_LENGTH_SEARCH_STRING, render} from "./components/utils";
+import {MIN_LENGTH_SEARCH_STRING, render, removeElement} from "./components/utils";
 import {PageController} from './controllers/page-controller';
 import {SearchController} from './controllers/search-controller';
 import {StatisticsController} from "./controllers/statistics-controller";
+import {ModelFilm} from "./api/model-film";
+import {API} from "./api/api";
+import {END_POINT, AUTHORIZATION} from "./components/utils";
 
-let filmCardsSav = Array.from({length: getFilmsAmount()}, getFilmCard);
-const onDataChange = (cards) => {
-  filmCardsSav = cards;
+// let filmCardsSav = Array.from({length: getFilmsAmount()}, getFilmCard);
+// const onDataChange = (cards) => {
+//   filmCardsSav = cards;
+// };
+
+const onDataChange = (update) => {
+  api.updateCard({
+    id: update.id,
+    data: ModelFilm.toRAW(update),
+  })
+    .then(() => {
+      api.getCards()
+        .then((updatedCards) => {
+          init(updatedCards);
+        });
+    });
 };
 
+const api = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
-const search = new Search();
-const profile = new Profile(filmCardsSav);
-// const menu = new Menu(filmCardsSav);
-
 const statisticsElement = document.querySelector(`.footer__statistics p`);
-
+const search = new Search();
+// removeElement(headerElement, search.getElement());
 render(headerElement, search.getElement());
-render(headerElement, profile.getElement());
 
-const statisticsController = new StatisticsController(mainElement, filmCardsSav, onDataChange);
-const searchController = new SearchController(mainElement, search, filmCardsSav, onDataChange);
-const pageController = new PageController(mainElement, filmCardsSav, searchController, statisticsController, onDataChange);
-searchController.init();
-pageController.init();
-statisticsController.init();
+const init = (cards) => {
 
-let querySearch = ``;
-search.getElement().querySelector(`input`).addEventListener(`keyup`, (evt) => {
-  if (querySearch !== evt.target.value) {
-    if (evt.target.value.length >= MIN_LENGTH_SEARCH_STRING) {
-      searchController.show();
-      pageController.hide();
-    } else {
-      searchController.hide();
-      pageController.show();
+  const profile = new Profile(cards);
+  removeElement(headerElement.querySelector(`.profile`));
+  render(headerElement, profile.getElement());
+  mainElement.innerHTML = ``;
+  const statisticsController = new StatisticsController(mainElement, cards, onDataChange);
+  const searchController = new SearchController(mainElement, search, cards, onDataChange);
+  const pageController = new PageController(mainElement, cards, searchController, statisticsController, onDataChange);
+  searchController.init();
+  pageController.init();
+  statisticsController.init();
+  statisticsElement.textContent = `${cards.length} movies inside`;
+
+  let querySearch = ``;
+  search.getElement().querySelector(`input`).addEventListener(`keyup`, (evt) => {
+    if (querySearch !== evt.target.value) {
+      if (evt.target.value.length >= MIN_LENGTH_SEARCH_STRING) {
+        searchController.show();
+        pageController.hide();
+      } else {
+        searchController.hide();
+        pageController.show();
+      }
+      querySearch = evt.target.value;
     }
-    querySearch = evt.target.value;
-  }
-});
+  });
 
-search.getElement().querySelector(`.search__reset`).addEventListener(`click`, () => {
-  searchController.hide();
-  pageController.show();
-});
+  search.getElement().querySelector(`.search__reset`).addEventListener(`click`, () => {
+    searchController.hide();
+    pageController.show();
+  });
 
-statisticsElement.textContent = `${getFilmsAmount()} movies inside`;
+
+};
+
+api.getCards().then((cards) => init(cards));
 
 

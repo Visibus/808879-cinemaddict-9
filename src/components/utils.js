@@ -1,4 +1,5 @@
 const MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
+const LENGTH_DESCRIPTION_CARD = 139;
 
 export const COUNT_CARDS = {
   filmsList: 5,
@@ -81,6 +82,11 @@ export const getRandDate = () => {
   return Date.now() - Math.floor(Math.random() * 7) * MILLISECONDS_IN_DAY;
 };
 
+export const getRandItem = (list) => {
+  const array = Array.isArray(list) ? list : [...list];
+  return array[getRandNumber(array.length - 1)];
+};
+
 export const Position = {
   AFTERBEGIN: `afterbegin`,
   BEFOREEND: `beforeend`
@@ -96,6 +102,10 @@ export const removeElement = (element) => {
   if (element) {
     element.remove();
   }
+};
+
+export const shortDescription = (description) => {
+  return description.length < LENGTH_DESCRIPTION_CARD ? description : `${description.slice(0, LENGTH_DESCRIPTION_CARD).trim()}…`;
 };
 
 export const render = (container, element, place = Position.BEFOREEND) => {
@@ -145,3 +155,34 @@ export const getUserTitle = (amount) => {
   }
   return title;
 };
+
+export const objectToArray = (object) => {
+  return Object.keys(object).map((id) => object[id]);
+};
+
+export const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=${Math.random()}`;
+export const END_POINT = `https://htmlacademy-es-9.appspot.com/cinemaddict`;
+
+export const emojis = [
+  {
+    id: `smile`,
+    value: `sleeping`,
+    source: `./images/emoji/smile.png`,
+  },
+  {
+    id: `sleeping`,
+    value: `neutral-face`,
+    source: `./images/emoji/sleeping.png`,
+  },
+  {
+    id: `puke`,
+    value: `grinning`,
+    source: `./images/emoji/puke.png`,
+  },
+  {
+    id: `angry`,
+    value: `grinning`,
+    source: `./images/emoji/angry.png`
+  }
+];
+

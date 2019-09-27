@@ -1,4 +1,4 @@
-import {getRandNumber, getRandElementFromArr, getRandSeveralElementsFromArr, getRandBoolean, getRandDate} from "./utils";
+import {getRandNumber, getRandElementFromArr, getRandSeveralElementsFromArr, getRandBoolean, getRandDate, getRandItem, emojis} from "./utils";
 import moment from 'moment';
 
 const AMOUNT_FILMS = 14;
@@ -17,7 +17,7 @@ const namesMoc = [`Anthony Mann`, `Anne Wigton`, `Heinz Herald`, `Richard Weil`,
 const genresMoc = [`action`, `adventure`, `comedy`, `drama`, `crime`, `horror`, `fantasy`, `romance`, `thriller`, `animation`, `family`, `war`, `musical`, `biography`, `sci-fi`, `western`];
 const postersMoc = [`./images/posters/made-for-each-other.png`, `./images/posters/popeye-meets-sinbad.png`, `./images/posters/sagebrush-trail.jpg`, `./images/posters/santa-claus-conquers-the-martians.jpg`, `./images/posters/the-dance-of-life.jpg`, `./images/posters/the-great-flamarion.jpg`, `./images/posters/the-man-with-the-golden-arm.jpg`];
 const countriesMoc = [`India`, `USA`, `Russia`, `France`, `Italy`];
-const emojiNoc = [`./images/emoji/smile.png`, `./images/emoji/sleeping.png`, `./images/emoji/puke.png`, `./images/emoji/angry.png`];
+// const emojiNoc = [`./images/emoji/smile.png`, `./images/emoji/sleeping.png`, `./images/emoji/puke.png`, `./images/emoji/angry.png`];
 
 const commentMoc = [
   `Interesting setting and a good cast`,
@@ -35,7 +35,7 @@ const getRating = () => {
 };
 
 const getFilmComment = () => ({
-  emoji: getRandElementFromArr(emojiNoc),
+  emoji: getRandItem(emojis),
   text: getRandElementFromArr(commentMoc),
   date: getRandDate(),
   author: getRandElementFromArr(namesMoc)
@@ -45,7 +45,7 @@ const getFilmCard = () => ({
   titles: getRandElementFromArr(titlesMoc),
   rating: getRating(),
   year: `${getRandNumber(RANGE_YEARS) + MIN_YEAR}`,
-  duration: getRandNumber(200) * 60 * 1000,
+  duration: getRandNumber(200),
   genres: getRandSeveralElementsFromArr(genresMoc, 3),
   poster: getRandElementFromArr(postersMoc),
   description: getDescription(descriptionMoc),
@@ -54,6 +54,7 @@ const getFilmCard = () => ({
   watched: getRandBoolean(),
   favorite: getRandBoolean(),
   details: {
+    originalTitle: getRandElementFromArr(titlesMoc),
     age: `${getRandNumber(MAX_AGE)}+`,
     director: getRandElementFromArr(namesMoc),
     writers: new Array(MAX_ACTORS_COUNT).fill(``).map(() => getRandElementFromArr(namesMoc)),
