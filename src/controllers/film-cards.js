@@ -74,7 +74,7 @@ export class FilmCardsController {
 
   _onDataChange(newData, oldData) {
     this._cards[this._cards.findIndex((card) => card === oldData)] = newData;
-    this.setFilmCards(this._cards);
+    // this.setFilmCards(this._cards);
     this._onDataChangeMain(newData, oldData);
   }
 
