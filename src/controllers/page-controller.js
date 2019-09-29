@@ -208,7 +208,7 @@ export class PageController {
     const index = this._cards.findIndex((card) => card === oldData);
     this._cards[index] = newData;
     this._onDataChangeMain(this._cards[index]);
-    this._renderFilmList();
+    // this._renderFilmList();
     this._renderMenu();
   }
 

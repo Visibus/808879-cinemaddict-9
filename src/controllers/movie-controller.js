@@ -5,6 +5,7 @@ import {Rating} from '../components/rating';
 import {Comments} from '../components/comments';
 import {API} from "../api/api";
 import {ModelComment} from "../api/model-comment";
+import {ModelFilm} from "../api/model-film";
 import moment from "moment";
 
 export class MovieController {
@@ -47,11 +48,13 @@ export class MovieController {
           evt.target.disabled = false;
           evt.target.value = ``;
           evt.target.blur();
-          this._onDataChange(entry, this._card);
+          evt.target.classList.remove(`input-error`);
+          // this._onDataChange(entry, this._card);
           renderCommentsAgain();
         })
         .catch(() => {
           evt.target.disabled = false;
+          evt.target.classList.add(`input-error`);
         });
     };
 
@@ -62,7 +65,7 @@ export class MovieController {
         .then(() => {
           evt.target.disabled = false;
           evt.target.textContent = `Delete`;
-          this._onDataChange(entry, this._card);
+          // this._onDataChange(entry, this._card);
           renderCommentsAgain();
         })
         .catch(() => {
@@ -80,14 +83,12 @@ export class MovieController {
           .addEventListener(`click`, (evt) => {
             evt.preventDefault();
             onCommentsDelete(evt, index, comments);
-
-            let quantityComments = this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML;
-            this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML = `${+quantityComments - 1}`;
           });
 
           commentsListElement = this._filmDetails.getElement().querySelector(`.film-details__comments-list`);
           render(commentsListElement, comment.getElement());
         });
+        this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML = `${comments.length}`;
       });
     };
 
@@ -217,7 +218,7 @@ export class MovieController {
       const chosenEmoji = this._filmDetails.getElement().querySelector(`.film-details__add-emoji-label img`);
 
       if ((evt.key === `Enter` && evt.metaKey) || (evt.key === `Enter` && evt.ctrlKey)) {
-        if (!commentFieldElement.value || !checkedInputElement) {
+        if (!commentFieldElement.value || !checkedInputElement || !chosenEmoji) {
           return;
         }
         const createComment = (emoji) => {
@@ -237,17 +238,40 @@ export class MovieController {
           textaria.value = ``;
           textaria.placeholder = `Select reaction below and write comment here`;
         };
-        let quantityComments = this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML;
-        this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML = `${+quantityComments + 1}`;
         createComment(chosenEmoji);
       }
     });
 
     this._rating.getElement()
     .querySelector(`.film-details__user-rating-score`)
-    .addEventListener(`change`, () => {
+    .addEventListener(`change`, (evt) => {
       const radio = Array.from(this._rating.getElement().querySelectorAll(`.film-details__user-rating-input`));
       entry.ratingViewer = Number(radio.length && radio.find((r) => r.checked).value);
+      const ratingInput = this._rating.getElement().querySelector(`[value="${entry.ratingViewer}"]`);
+      const ratingInputLabel = this._rating.getElement().querySelector(`[for="${evt.target.id}"]`);
+      const errorInput = this._rating.getElement().querySelectorAll(`.rating-input-error`);
+
+      if (errorInput) {
+        errorInput.forEach((elErrInput) => elErrInput.classList.remove(`rating-input-error`));
+      }
+      if (this._rating.getElement().classList.contains(`rating-form-error`)) {
+        this._rating.getElement().classList.remove(`rating-form-error`);
+      }
+
+      this._api.updateCard({
+        id: this._card.id,
+        data: ModelFilm.toRAW(this._card),
+      })
+        .then(() => {
+          ratingInput.checked = true;
+        })
+        .catch(() => {
+          ratingInput.checked = false;
+          ratingInputLabel.classList.add(`rating-input-error`);
+          this._rating.getElement().classList.add(`rating-form-error`);
+          entry.ratingViewer = null;
+        });
+
 
     });
 
