@@ -1,9 +1,9 @@
-import {createElement} from './utils';
-import moment from 'moment';
+import {createElement} from "./utils";
+import moment from "moment";
 
 
-export class Popup {
-  constructor({titles, rating, duration, poster, genres, watchlist, watched, favorite, details: {originalTitle, age, director, writers, actors, releaseDate, countries, description}, comments}) {
+export default class Popup {
+  constructor({titles, rating, duration, poster, genres, watchlist, watched, favorite, details: {originalTitle, age, director, writers, actors, releaseDate, countries, description}, comments, ratingViewer}) {
     this._element = null;
     this._titles = titles;
     this._rating = rating;
@@ -24,6 +24,7 @@ export class Popup {
       _description: description
     };
     this._comments = comments;
+    this._ratingViewer = ratingViewer;
   }
 
   getElement() {
@@ -56,6 +57,7 @@ export class Popup {
 
           <div class="film-details__rating">
             <p class="film-details__total-rating">${this._rating}</p>
+            <p class="film-details__user-rating">${(this._ratingViewer && this._watched) ? `Your rate ${this._ratingViewer}` : ``}</p>
           </div>
         </div>
 
@@ -86,7 +88,7 @@ export class Popup {
             <td class="film-details__cell">${this._details._countries}</td>
           </tr>
           <tr class="film-details__row">
-            <td class="film-details__term">Genres</td>
+            <td class="film-details__term">${this._genres.length > 1 ? `Genres` : `Genre`}</td>
             <td class="film-details__cell">
               <span class="film-details__genre">
                 ${this._genres

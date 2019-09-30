@@ -1,7 +1,7 @@
-import {AbstractComponent} from './abstract-component';
-import moment from 'moment';
+import AbstractComponent from "./abstract-component";
+import moment from "moment";
 
-export class Card extends AbstractComponent {
+export default class Card extends AbstractComponent {
   constructor({titles, poster, description, rating, year, duration, genres, commentsAmount, watchlist, watched, favorite}) {
     super();
     this._titles = titles;

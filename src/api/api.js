@@ -1,5 +1,5 @@
-import {ModelFilm} from './model-film';
-import {ModelComment} from './model-comment';
+import ModelFilm from "./model-film";
+import ModelComment from "./model-comment";
 
 const Method = {
   GET: `GET`,
@@ -8,8 +8,13 @@ const Method = {
   DELETE: `DELETE`
 };
 
+const statusResponse = {
+  MIN_OK: 200,
+  MAX_OK: 300
+};
+
 const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.status >= statusResponse.MIN_OK && response.status < statusResponse.MAX_OK) {
     return response;
   }
   throw new Error(`${response.status}: ${response.statusText}`);
@@ -19,7 +24,7 @@ const toJSON = (response) => {
   return response.json();
 };
 
-export class API {
+export default class API {
   constructor({endPoint, authorization}) {
     this._endPoint = endPoint;
     this._authorization = authorization;

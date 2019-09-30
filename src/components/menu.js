@@ -1,4 +1,4 @@
-import {AbstractComponent} from './abstract-component';
+import AbstractComponent from "./abstract-component";
 
 let filmFilters = [
   {
@@ -21,7 +21,7 @@ const countFilter = (filters, tasks) => {
   }
 };
 
-export class Menu extends AbstractComponent {
+export default class Menu extends AbstractComponent {
   constructor(cards) {
     super();
     this._cards = cards;

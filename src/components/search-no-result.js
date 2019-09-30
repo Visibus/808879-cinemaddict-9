@@ -1,6 +1,6 @@
-import {AbstractComponent} from './abstract-component';
+import AbstractComponent from "./abstract-component";
 
-export class SearchNoResult extends AbstractComponent {
+export default class SearchNoResult extends AbstractComponent {
   constructor() {
     super();
   }
