@@ -1,8 +1,10 @@
 import MovieController from "./movie-controller";
-import {COUNT_CARDS, render, removeElement, unrender} from "../components/utils";
+import {COUNT_CARDS, render, removeElement, unrender, Position} from "../components/utils";
 import ShowMore from "../components/show-more";
 import Films from "../components/films";
 import FilmsList from "../components/films-list";
+import NoFilms from "../components/no-films";
+
 
 export default class FilmCardsController {
   constructor(containerMain, container, onDataChange) {
@@ -18,6 +20,7 @@ export default class FilmCardsController {
     this._showMore = new ShowMore();
     this._films = new Films();
     this._filmsList = new FilmsList();
+    this._noFilms = new NoFilms();
   }
 
   setFilmCards(cards) {
@@ -31,6 +34,11 @@ export default class FilmCardsController {
 
     this._currentListFilms = 0;
     this._loadShowMore();
+
+    if (this._cards.length === 0) {
+      render(this._container, this._noFilms.getElement(), Position.AFTERBEGIN);
+    }
+
   }
 
   _renderFilmCard(card) {

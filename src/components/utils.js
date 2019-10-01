@@ -72,19 +72,19 @@ export const chartFilters = {
   },
   TODAY: {
     TYPE: `today`,
-    FILTER: (film) => moment(film.watchingDate).isoWeekday() === moment().isoWeekday()
+    FILTER: (film) => moment().isSame(moment(film.watchingDate), `day`)
   },
   WEEK: {
     TYPE: `week`,
-    FILTER: (film) => moment(film.watchingDate).isoWeek() === moment().isoWeek()
+    FILTER: (film) => moment(film.watchingDate) > moment().subtract(1, `w`)
   },
   MONTH: {
     TYPE: `month`,
-    FILTER: (film) => moment(film.watchingDate).month() === moment().month()
+    FILTER: (film) => moment(film.watchingDate) > moment().subtract(1, `month`)
   },
   YEAR: {
     TYPE: `year`,
-    FILTER: (film) => moment(film.watchingDate).year() === moment().year()
+    FILTER: (film) => moment(film.watchingDate) > moment().subtract(1, `y`)
   },
 
 };
