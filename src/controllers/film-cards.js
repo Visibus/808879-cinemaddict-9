@@ -1,6 +1,5 @@
 import MovieController from "./movie-controller";
 import {COUNT_CARDS, render, removeElement, unrender} from "../components/utils";
-import {getFilmsAmount} from "../components/data";
 import ShowMore from "../components/show-more";
 import Films from "../components/films";
 import FilmsList from "../components/films-list";
@@ -27,7 +26,7 @@ export default class FilmCardsController {
     this._container.innerHTML = ``;
     this._unrenderShowMore();
 
-    const firstListFilmCards = (getFilmsAmount() > COUNT_CARDS.filmsList) ? this._cards.slice(0, COUNT_CARDS.filmsList) : cards;
+    const firstListFilmCards = (this._cards.length > COUNT_CARDS.filmsList) ? this._cards.slice(0, COUNT_CARDS.filmsList) : cards;
     firstListFilmCards.forEach((card) => this._renderFilmCard(card));
 
     this._currentListFilms = 0;

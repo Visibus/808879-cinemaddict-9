@@ -1,6 +1,5 @@
 import moment from "moment";
 
-const MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
 const LENGTH_DESCRIPTION_CARD = 139;
 
 export const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=${Math.random()}`;
@@ -103,31 +102,6 @@ export const UserRating = {
     SECOND: `Fan`,
     THIRD: `Movie Buff`,
   },
-};
-
-export const getRandNumber = (numeric) => {
-  return Math.floor(Math.random() * numeric);
-};
-
-export const getRandElementFromArr = (list) => {
-  return list[getRandNumber(list.length)];
-};
-
-export const getRandSeveralElementsFromArr = (list, countElements) => {
-  return list.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * countElements + 1));
-};
-
-export const getRandBoolean = () => {
-  return Boolean(Math.round(Math.random()));
-};
-
-export const getRandDate = () => {
-  return Date.now() - Math.floor(Math.random() * 7) * MILLISECONDS_IN_DAY;
-};
-
-export const getRandItem = (list) => {
-  const listItem = Array.isArray(list) ? list : [...list];
-  return listItem[getRandNumber(listItem.length - 1)];
 };
 
 export const Position = {
