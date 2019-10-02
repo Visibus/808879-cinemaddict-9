@@ -1,7 +1,7 @@
 import {getUserTitle} from "./utils";
-import {AbstractComponent} from './abstract-component';
+import AbstractComponent from "./abstract-component";
 
-export class StatisticsFilters extends AbstractComponent {
+export default class StatisticsFilters extends AbstractComponent {
   constructor(cards) {
     super();
     this._cards = cards;

@@ -1,17 +1,13 @@
-import {Search} from './components/search.js';
-import {Profile} from './components/profile.js';
-import {MIN_LENGTH_SEARCH_STRING, render, removeElement} from "./components/utils";
-import {PageController} from './controllers/page-controller';
-import {SearchController} from './controllers/search-controller';
-import {StatisticsController} from "./controllers/statistics-controller";
-import {ModelFilm} from "./api/model-film";
-import {API} from "./api/api";
+import Search from "./components/search";
+import Profile from "./components/profile";
+import {MIN_LENGTH_SEARCH_STRING, render, removeElement, unrender} from "./components/utils";
+import PageController from "./controllers/page-controller";
+import SearchController from "./controllers/search-controller";
+import StatisticsController from "./controllers/statistics-controller";
+import ModelFilm from "./api/model-film";
+import API from "./api/api";
 import {END_POINT, AUTHORIZATION} from "./components/utils";
-
-// let filmCardsSav = Array.from({length: getFilmsAmount()}, getFilmCard);
-// const onDataChange = (cards) => {
-//   filmCardsSav = cards;
-// };
+import Loading from "./components/loading";
 
 const onDataChange = (update) => {
   api.updateCard({
@@ -31,10 +27,13 @@ const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const statisticsElement = document.querySelector(`.footer__statistics p`);
 const search = new Search();
-// removeElement(headerElement, search.getElement());
 render(headerElement, search.getElement());
+const loading = new Loading();
 
 const init = (cards) => {
+
+  unrender(loading.getElement());
+  loading.removeElement();
 
   const profile = new Profile(cards);
   removeElement(headerElement.querySelector(`.profile`));
@@ -70,6 +69,7 @@ const init = (cards) => {
 
 };
 
+render(mainElement, loading.getElement());
 api.getCards().then((cards) => init(cards));
 
 

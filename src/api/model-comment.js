@@ -1,7 +1,7 @@
 import {emojis} from "../components/utils";
 import moment from "moment";
 
-export class ModelComment {
+export default class ModelComment {
   constructor(data) {
     this.id = data[`id`];
     this.text = data[`comment`];

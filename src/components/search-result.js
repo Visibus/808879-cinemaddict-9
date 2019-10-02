@@ -1,6 +1,6 @@
-import {AbstractComponent} from './abstract-component';
+import AbstractComponent from "./abstract-component";
 
-export class SearchResult extends AbstractComponent {
+export default class SearchResult extends AbstractComponent {
   constructor(count) {
     super();
     this._count = count;

@@ -1,9 +1,9 @@
 import {mostFrequents} from "./utils";
-import {AbstractComponent} from './abstract-component';
-import moment from 'moment';
+import AbstractComponent from "./abstract-component";
+import moment from "moment";
 
 
-export class Statistics extends AbstractComponent {
+export default class Statistics extends AbstractComponent {
   constructor(cards) {
     super();
     this._cards = cards;

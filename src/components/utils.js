@@ -1,5 +1,12 @@
-const MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
+import moment from "moment";
+
 const LENGTH_DESCRIPTION_CARD = 139;
+
+export const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=${Math.random()}`;
+export const END_POINT = `https://htmlacademy-es-9.appspot.com/cinemaddict`;
+export const MIN_LENGTH_SEARCH_STRING = 3;
+export const MIN_RATED = 0;
+export const MIN_AMOUNT_COMMENTS = 0;
 
 export const COUNT_CARDS = {
   filmsList: 5,
@@ -7,11 +14,13 @@ export const COUNT_CARDS = {
   filmsMostCommented: 2,
 };
 
-export const MIN_LENGTH_SEARCH_STRING = 3;
+export const TagNames = {
+  A: `A`
+};
 
 export const typeSorting = {
   BY_DEFAULT: {
-    TYPE: `default`,
+    TYPE: (a, b) => a.id - b.id,
     SORT: undefined,
   },
   BY_DATE: {
@@ -47,8 +56,41 @@ export const typeFilters = {
   },
 };
 
+export const menuSections = {
+  FILMS: {
+    TYPE: `films`
+  },
+  STATS: {
+    TYPE: `stats`
+  },
+};
+
+export const chartFilters = {
+  ALL_TIME: {
+    TYPE: `all-time`,
+    FILTER: ``
+  },
+  TODAY: {
+    TYPE: `today`,
+    FILTER: (film) => moment().isSame(moment(film.watchingDate), `day`)
+  },
+  WEEK: {
+    TYPE: `week`,
+    FILTER: (film) => moment(film.watchingDate) > moment().subtract(1, `w`)
+  },
+  MONTH: {
+    TYPE: `month`,
+    FILTER: (film) => moment(film.watchingDate) > moment().subtract(1, `month`)
+  },
+  YEAR: {
+    TYPE: `year`,
+    FILTER: (film) => moment(film.watchingDate) > moment().subtract(1, `y`)
+  },
+
+};
+
 export const UserRating = {
-  MILESTONES: {
+  RANGES: {
     FIRST: 1,
     SECOND: 10,
     THIRD: 11,
@@ -60,31 +102,6 @@ export const UserRating = {
     SECOND: `Fan`,
     THIRD: `Movie Buff`,
   },
-};
-
-export const getRandNumber = (number) => {
-  return Math.floor(Math.random() * number);
-};
-
-export const getRandElementFromArr = (array) => {
-  return array[getRandNumber(array.length)];
-};
-
-export const getRandSeveralElementsFromArr = (array, countElements) => {
-  return array.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * countElements + 1));
-};
-
-export const getRandBoolean = () => {
-  return Boolean(Math.round(Math.random()));
-};
-
-export const getRandDate = () => {
-  return Date.now() - Math.floor(Math.random() * 7) * MILLISECONDS_IN_DAY;
-};
-
-export const getRandItem = (list) => {
-  const array = Array.isArray(list) ? list : [...list];
-  return array[getRandNumber(array.length - 1)];
 };
 
 export const Position = {
@@ -146,22 +163,16 @@ export const mostFrequents = (array) => {
 
 export const getUserTitle = (amount) => {
   let title = ``;
-  if (amount >= UserRating.MILESTONES.FIRST && amount <= UserRating.MILESTONES.SECOND) {
+  if (amount >= UserRating.RANGES.FIRST && amount <= UserRating.RANGES.SECOND) {
     title = UserRating.TITLES.FIRST;
-  } else if (amount >= UserRating.MILESTONES.THIRD && amount <= UserRating.MILESTONES.FOURTH) {
+  } else if (amount >= UserRating.RANGES.THIRD && amount <= UserRating.RANGES.FOURTH) {
     title = UserRating.TITLES.SECOND;
-  } else if (amount > UserRating.MILESTONES.FIFTH) {
+  } else if (amount > UserRating.RANGES.FIFTH) {
     title = UserRating.TITLES.THIRD;
   }
   return title;
 };
 
-export const objectToArray = (object) => {
-  return Object.keys(object).map((id) => object[id]);
-};
-
-export const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=${Math.random()}`;
-export const END_POINT = `https://htmlacademy-es-9.appspot.com/cinemaddict`;
 
 export const emojis = [
   {
@@ -186,3 +197,44 @@ export const emojis = [
   }
 ];
 
+export const ChartConfig = {
+  TYPE: `horizontalBar`,
+  DATASETS: {
+    BACKGROUNDCOLOR: `#ffe800`,
+    DATALABELS: {
+      ANCHOR: `start`,
+      ALIGN: `start`,
+      OFFSET: 50,
+      COLOR: `#ffffff`,
+      FONT: {
+        SIZE: 16,
+      },
+    }
+  },
+  OPTIONS: {
+    LEGEND: {
+      DISPLAY: false,
+    },
+    TOOLTIPS: {
+      ENABLED: false,
+    },
+    LAYOUT: {
+      PADDING: {
+        LEFT: 200,
+      },
+    },
+    SCALES: {
+      XAXES: {
+        DISPLAY: false,
+        TICKS: {
+          BEGINATZERO: true,
+          STEPSIZE: 1,
+        },
+      },
+      YAXES: {
+        display: false,
+        barThickness: 25,
+      },
+    },
+  }
+};

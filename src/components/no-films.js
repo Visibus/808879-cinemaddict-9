@@ -1,6 +1,6 @@
 import {createElement} from "./utils";
 
-export class NoFilms {
+export default class NoFilms {
   constructor() {
     this._element = null;
   }

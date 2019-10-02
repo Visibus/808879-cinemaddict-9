@@ -1,17 +1,17 @@
-import {COUNT_CARDS, render, unrender, Position, removeElement, typeSorting, typeFilters} from '../components/utils';
-import {Films} from "../components/films";
-import {FilmsList} from "../components/films-list";
-import {FilmsListTopRated} from "../components/films-list-top-rated";
-import {FilmsListMostCommented} from "../components/films-list-most-commented";
-import {NoFilms} from '../components/no-films';
-import {Sort} from '../components/sort';
-import {MovieController} from './movie-controller';
-import {Statistics} from '../components/statistics';
-import {Menu} from '../components/menu.js';
-import {FilmCardsController} from "./film-cards";
+import {COUNT_CARDS, render, unrender, Position, removeElement, typeSorting, typeFilters, menuSections, MIN_RATED, MIN_AMOUNT_COMMENTS, TagNames} from "../components/utils";
+import Films from "../components/films";
+import FilmsList from "../components/films-list";
+import FilmsListTopRated from "../components/films-list-top-rated";
+import FilmsListMostCommented from "../components/films-list-most-commented";
+import NoFilms from "../components/no-films";
+import Sort from "../components/sort";
+import MovieController from "./movie-controller";
+import Statistics from "../components/statistics";
+import Menu from "../components/menu";
+import FilmCardsController from "./film-cards";
 
 
-export class PageController {
+export default class PageController {
   constructor(container, cards, searchController, statisticsController, onDataChange) {
     this._container = container;
     this._cards = cards;
@@ -26,7 +26,6 @@ export class PageController {
     this._noFilms = new NoFilms();
     this._menu = new Menu(cards);
     this._sort = new Sort();
-    this._currArray = 0;
     this._subscriptions = [];
     this._onDataChange = this._onDataChange.bind(this);
     this._onChangeView = this._onChangeView.bind(this);
@@ -56,7 +55,6 @@ export class PageController {
   show() {
     this._sort.getElement().classList.remove(`visually-hidden`);
     this._films.getElement().classList.remove(`visually-hidden`);
-    this._renderFilmList(this._cards);
   }
 
   _loadExtraFilms() {
@@ -71,15 +69,19 @@ export class PageController {
     const extraFilmsListElements = Array.from(document.querySelectorAll(`.films-list--extra`));
 
     extraFilmsListElements.forEach((films, index) => {
-      const container = films.querySelector(`.films-list__container`);
+      const containerElement = films.querySelector(`.films-list__container`);
       switch (index) {
         case 0:
-          this._arraySort = this._cards.slice().sort((a, b) => b.rating - a.rating);
-          this._arraySort.slice(0, COUNT_CARDS.filmsTopRated).forEach((filmMock) => this._renderFilm(container, filmMock));
+          if (this._cards.some((cardTopRated) => cardTopRated.rating > MIN_RATED)) {
+            this._sortListFilms = this._cards.slice().sort(typeSorting.BY_RATING.SORT);
+            this._sortListFilms.slice(0, COUNT_CARDS.filmsTopRated).forEach((filmMock) => this._renderFilm(containerElement, filmMock));
+          }
           break;
         case 1:
-          this._arraySort = this._cards.slice().sort((a, b) => b.commentsAmount - a.commentsAmount);
-          this._arraySort.slice(0, COUNT_CARDS.filmsMostCommented).forEach((filmMock) => this._renderFilm(container, filmMock));
+          if (this._cards.some((cardMostCommented) => cardMostCommented.commentsAmount > MIN_AMOUNT_COMMENTS)) {
+            this._sortListFilms = this._cards.slice().sort(typeSorting.BY_DATE.SORT);
+            this._sortListFilms.slice(0, COUNT_CARDS.filmsMostCommented).forEach((filmMock) => this._renderFilm(containerElement, filmMock));
+          }
           break;
       }
     });
@@ -99,7 +101,7 @@ export class PageController {
     activeFilterElement.classList.add(`main-navigation__item--active`);
 
     this._menu.getElement().addEventListener(`click`, (evt) => {
-      if (evt.target.tagName !== `A`) {
+      if (evt.target.tagName !== TagNames.A) {
         return;
       }
 
@@ -110,30 +112,30 @@ export class PageController {
       evt.target.classList.add(activeClass);
 
       switch (evt.target.dataset.screen) {
-        case `all`:
+        case typeFilters.ALL.TYPE:
           this.show();
           this._selectedFilter = typeFilters.ALL;
           this._searchController.hide();
           this._statisticsController.hide();
           break;
-        case `stats`:
+        case menuSections.STATS.TYPE:
           this.hide();
           this._searchController.hide();
           this._statisticsController.show(this._selectedCards);
           break;
-        case `watchlist`:
+        case typeFilters.WATCHLIST.TYPE:
           this.show();
           this._selectedFilter = typeFilters.WATCHLIST;
           this._searchController.hide();
           this._statisticsController.hide();
           break;
-        case `history`:
+        case typeFilters.WATCHED.TYPE:
           this.show();
           this._selectedFilter = typeFilters.WATCHED;
           this._searchController.hide();
           this._statisticsController.hide();
           break;
-        case `favorites`:
+        case typeFilters.FAVORITE.TYPE:
           this.show();
           this._selectedFilter = typeFilters.FAVORITE;
           this._searchController.hide();
@@ -155,6 +157,7 @@ export class PageController {
 
     const filmsListElement = this._container.querySelector(`.films-list`);
     const filmsListContainerElement = filmsListElement.querySelector(`.films-list__container`);
+
     this._filmCardsController = new FilmCardsController(this._container, filmsListContainerElement, this._onDataChange.bind(this));
     this._selectedCards = this._cards.slice().filter(this._selectedFilter.FILTER).sort(this._selectedSorting.SORT);
     this._filmCardsController.setFilmCards(this._selectedCards);
@@ -177,7 +180,7 @@ export class PageController {
   _onSortLinkClick(evt) {
     evt.preventDefault();
 
-    if (evt.target.tagName !== `A`) {
+    if (evt.target.tagName !== TagNames.A) {
       return;
     }
 
@@ -208,7 +211,6 @@ export class PageController {
     const index = this._cards.findIndex((card) => card === oldData);
     this._cards[index] = newData;
     this._onDataChangeMain(this._cards[index]);
-    // this._renderFilmList();
     this._renderMenu();
   }
 

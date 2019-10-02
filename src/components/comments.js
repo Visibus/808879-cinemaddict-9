@@ -1,6 +1,6 @@
-import {AbstractComponent} from "./abstract-component";
+import AbstractComponent from "./abstract-component";
 
-export class Comments extends AbstractComponent {
+export default class Comments extends AbstractComponent {
   constructor({emoji, text, date, author}) {
     super();
     this._emoji = emoji;

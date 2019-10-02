@@ -1,7 +1,7 @@
 import {shortDescription} from "../components/utils";
 import moment from "moment";
 
-export class ModelFilm {
+export default class ModelFilm {
   constructor(data) {
     this.id = data[`id`];
     this.titles = data[`film_info`][`title`];

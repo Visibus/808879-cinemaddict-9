@@ -1,10 +1,10 @@
-import {MIN_LENGTH_SEARCH_STRING, removeElement, render} from '../components/utils';
-import {FilmCardsController} from "./film-cards";
-import {SearchResult} from '../components/search-result';
-import {SearchNoResult} from '../components/search-no-result';
-import {FilmsList} from '../components/films-list';
+import {MIN_LENGTH_SEARCH_STRING, removeElement, render} from "../components/utils";
+import FilmCardsController from "./film-cards";
+import SearchResult from "../components/search-result";
+import SearchNoResult from "../components/search-no-result";
+import FilmsList from "../components/films-list";
 
-export class SearchController {
+export default class SearchController {
   constructor(container, search, cards, onDataChange) {
     this._container = container;
     this._search = search;
