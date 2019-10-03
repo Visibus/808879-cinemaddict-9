@@ -52,11 +52,11 @@ export default class API {
       .then(ModelComment.parseComments);
   }
 
-  createComment({id, data}) {
+  createComment({id, card}) {
     return this._load({
       url: `comments/${id}`,
       method: Method.POST,
-      body: JSON.stringify(data),
+      body: JSON.stringify(card),
       headers: new Headers({'Content-Type': `application/json`}),
     })
       .then(toJSON);
