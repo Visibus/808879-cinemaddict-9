@@ -36,11 +36,11 @@ export default class API {
       .then(ModelFilm.parseCards);
   }
 
-  updateCard({id, data}) {
+  updateCard({id, card}) {
     return this._load({
       url: `movies/${id}`,
       method: Method.PUT,
-      body: JSON.stringify(data),
+      body: JSON.stringify(card),
       headers: new Headers({'Content-Type': `application/json`}),
     })
       .then(toJSON);

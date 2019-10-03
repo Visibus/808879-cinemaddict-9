@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component";
 
-let filmFilters = [
+const filmFilters = [
   {
     title: `Watchlist`,
     filter: (card) => card.watchlist,

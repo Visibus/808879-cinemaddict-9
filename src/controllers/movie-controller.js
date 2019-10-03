@@ -91,7 +91,7 @@ export default class MovieController {
           commentsListElement = this._filmDetails.getElement().querySelector(`.film-details__comments-list`);
           render(commentsListElement, comment.getElement());
         });
-        this._filmDetails.getElement().querySelector(`.film-details__comments-count`).innerHTML = `${comments.length}`;
+        this._filmDetails.getElement().querySelector(`.film-details__comments-count`).textContent = `${comments.length}`;
         entry.comments = this._card.comments;
       });
     };

@@ -1,4 +1,4 @@
-import {mostFrequents} from "./utils";
+import {getMostFrequents} from "./utils";
 import AbstractComponent from "./abstract-component";
 import moment from "moment";
 
@@ -19,7 +19,7 @@ export default class Statistics extends AbstractComponent {
       return acc;
     }, []);
 
-    this._topGenre = mostFrequents(watchedGenres)[0];
+    this._topGenre = getMostFrequents(watchedGenres)[0];
 
     const sumDuration = (cards) => cards.reduce((acc, card) => {
       if (card.watched) {

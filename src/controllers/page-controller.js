@@ -55,6 +55,7 @@ export default class PageController {
   show() {
     this._sort.getElement().classList.remove(`visually-hidden`);
     this._films.getElement().classList.remove(`visually-hidden`);
+    this._renderFilmList(this._cards);
   }
 
   _loadExtraFilms() {
@@ -79,7 +80,7 @@ export default class PageController {
           break;
         case 1:
           if (this._cards.some((cardMostCommented) => cardMostCommented.commentsAmount > MIN_AMOUNT_COMMENTS)) {
-            this._sortListFilms = this._cards.slice().sort(typeSorting.BY_DATE.SORT);
+            this._sortListFilms = this._cards.slice().sort(typeSorting.BY_COMMENTS.SORT);
             this._sortListFilms.slice(0, COUNT_CARDS.filmsMostCommented).forEach((filmMock) => this._renderFilm(containerElement, filmMock));
           }
           break;

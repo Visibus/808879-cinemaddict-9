@@ -80,8 +80,8 @@ export default class Popup {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${moment.utc(moment.duration(this._duration, `minutes`).asMilliseconds()).format(`H`) + ` h ` +
-            moment.utc(moment.duration(this._duration, `minutes`).asMilliseconds()).format(`m`) + ` m`}</td>
+            <td class="film-details__cell">${moment.utc(moment.duration(this._duration, `minutes`).asMilliseconds()).format(`H`)} h
+            ${moment.utc(moment.duration(this._duration, `minutes`).asMilliseconds()).format(`m`)} m</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>

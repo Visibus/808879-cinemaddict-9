@@ -121,7 +121,7 @@ export const removeElement = (element) => {
   }
 };
 
-export const shortDescription = (description) => {
+export const getShortDescription = (description) => {
   return description.length < LENGTH_DESCRIPTION_CARD ? description : `${description.slice(0, LENGTH_DESCRIPTION_CARD).trim()}…`;
 };
 
@@ -154,7 +154,7 @@ export const findCounts = (array) => {
     .reduce((obj, key) => (Object.assign({}, obj, {[key]: counts[key]})), {});
 };
 
-export const mostFrequents = (array) => {
+export const getMostFrequents = (array) => {
   const counts = findCounts(array);
   const maxCount = Math.max(...Object.values(counts));
 
