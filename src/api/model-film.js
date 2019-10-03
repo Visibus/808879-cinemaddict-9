@@ -1,41 +1,41 @@
-import {shortDescription} from "../components/utils";
+import {getShortDescription} from "../components/utils";
 import moment from "moment";
 
 export default class ModelFilm {
-  constructor(data) {
-    this.id = data[`id`];
-    this.titles = data[`film_info`][`title`];
-    this.rating = data[`film_info`][`total_rating`];
-    this.year = moment(data[`film_info`][`release`][`date`]).format(`YYYY`);
-    this.duration = data[`film_info`][`runtime`];
-    this.genres = data[`film_info`][`genre`];
-    this.poster = data[`film_info`][`poster`];
-    this.description = shortDescription(data[`film_info`][`description`]);
-    this.commentsAmount = data[`comments`].length;
-    this.watchlist = data[`user_details`][`watchlist`];
-    this.watched = data[`user_details`][`already_watched`];
-    this.favorite = data[`user_details`][`favorite`];
+  constructor(response) {
+    this.id = response[`id`];
+    this.titles = response[`film_info`][`title`];
+    this.rating = response[`film_info`][`total_rating`];
+    this.year = moment(response[`film_info`][`release`][`date`]).format(`YYYY`);
+    this.duration = response[`film_info`][`runtime`];
+    this.genres = response[`film_info`][`genre`];
+    this.poster = response[`film_info`][`poster`];
+    this.description = getShortDescription(response[`film_info`][`description`]);
+    this.commentsAmount = response[`comments`].length;
+    this.watchlist = response[`user_details`][`watchlist`];
+    this.watched = response[`user_details`][`already_watched`];
+    this.favorite = response[`user_details`][`favorite`];
     this.details = {
-      originalTitle: data[`film_info`][`alternative_title`],
-      age: data[`film_info`][`age_rating`],
-      director: data[`film_info`][`director`],
-      writers: data[`film_info`][`writers`],
-      actors: data[`film_info`][`actors`],
-      releaseDate: moment(data[`film_info`][`release`][`date`]).format(`DD MMMM YYYY`),
-      countries: data[`film_info`][`release`][`release_country`],
-      description: data[`film_info`][`description`],
+      originalTitle: response[`film_info`][`alternative_title`],
+      age: response[`film_info`][`age_rating`],
+      director: response[`film_info`][`director`],
+      writers: response[`film_info`][`writers`],
+      actors: response[`film_info`][`actors`],
+      releaseDate: moment(response[`film_info`][`release`][`date`]).format(`DD MMMM YYYY`),
+      countries: response[`film_info`][`release`][`release_country`],
+      description: response[`film_info`][`description`],
     };
-    this.ratingViewer = data[`user_details`][`already_watched`] ? data[`user_details`][`personal_rating`] : 0;
-    this.watchingDate = data[`user_details`][`watching_date`];
-    this.comments = data[`comments`];
+    this.ratingViewer = response[`user_details`][`already_watched`] ? response[`user_details`][`personal_rating`] : 0;
+    this.watchingDate = response[`user_details`][`watching_date`];
+    this.comments = response[`comments`];
   }
 
-  static parseCard(data) {
-    return new ModelFilm(data);
+  static parseCard(card) {
+    return new ModelFilm(card);
   }
 
-  static parseCards(data) {
-    return data.map(ModelFilm.parseCard);
+  static parseCards(cards) {
+    return cards.map(ModelFilm.parseCard);
   }
 
   static toRAW(card) {

@@ -2,15 +2,15 @@ import {emojis} from "../components/utils";
 import moment from "moment";
 
 export default class ModelComment {
-  constructor(data) {
-    this.id = data[`id`];
-    this.text = data[`comment`];
-    this.author = data[`author`];
-    this.date = moment(data[`date`]).fromNow();
+  constructor(response) {
+    this.id = response[`id`];
+    this.text = response[`comment`];
+    this.author = response[`author`];
+    this.date = moment(response[`date`]).fromNow();
     this.emoji = {
-      id: data[`emotion`],
+      id: response[`emotion`],
       source: emojis.reduce((acc, emoji) => {
-        if (emoji.id === data[`emotion`]) {
+        if (emoji.id === response[`emotion`]) {
           acc = emoji.source;
         }
 
@@ -19,12 +19,12 @@ export default class ModelComment {
     };
   }
 
-  static parseComment(data) {
-    return new ModelComment(data);
+  static parseComment(comment) {
+    return new ModelComment(comment);
   }
 
-  static parseComments(data) {
-    return data.map(ModelComment.parseComment);
+  static parseComments(comments) {
+    return comments.map(ModelComment.parseComment);
   }
 
   static toRAW(comment) {
