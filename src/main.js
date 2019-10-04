@@ -12,7 +12,7 @@ import Loading from "./components/loading";
 const onDataChange = (update) => {
   api.updateCard({
     id: update.id,
-    data: ModelFilm.toRAW(update),
+    card: ModelFilm.toRAW(update),
   })
     .then(() => {
       api.getCards()

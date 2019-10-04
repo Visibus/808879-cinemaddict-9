@@ -10,9 +10,6 @@
     "test": "npm run eslint"
   },
   "devDependencies": {
-    "chart": "0.1.2",
-    "chart.js": "2.8.0",
-    "chartjs-plugin-datalabels": "0.7.0",
     "eslint": "6.1.0",
     "eslint-config-htmlacademy": "0.5.2",
     "webpack": "4.39.1",
@@ -23,6 +20,9 @@
     "node": "10"
   },
   "dependencies": {
+    "chart": "0.1.2",
+    "chart.js": "2.8.0",
+    "chartjs-plugin-datalabels": "0.7.0",
     "moment": "2.24.0"
   }
 }

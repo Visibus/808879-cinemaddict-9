@@ -44,7 +44,7 @@ export default class MovieController {
     };
 
     const onCommentsAdd = (evt, idFilm, newComm) => {
-      this._api.createComment({id: idFilm, data: ModelComment.toRAW(newComm)})
+      this._api.createComment({id: idFilm, card: ModelComment.toRAW(newComm)})
         .then(() => {
           evt.target.disabled = false;
           evt.target.value = ``;
@@ -263,7 +263,7 @@ export default class MovieController {
 
       this._api.updateCard({
         id: this._card.id,
-        data: ModelFilm.toRAW(this._card),
+        card: ModelFilm.toRAW(this._card),
       })
         .then(() => {
           ratingInputElement.checked = true;
